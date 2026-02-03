@@ -1,0 +1,19 @@
+# --- Python Safety ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# --- Data Files (Too big for Git) ---
+oracle-cards.json
+manabox_export/
+*.csv
+
+# --- Outputs ---
+*.txt
+decks/
+
+# --- OS Junk ---
+.DS_Store
+Thumbs.db

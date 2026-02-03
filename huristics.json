@@ -1,0 +1,178 @@
+[
+    {
+        "role": "Wipe",
+        "must_have": [
+            "destroy all creatures"
+        ]
+    },
+    {
+        "role": "Wipe",
+        "must_have": [
+            "destroy all nonland"
+        ]
+    },
+    {
+        "role": "Wipe",
+        "must_have": [
+            "exile all creatures"
+        ]
+    },
+    {
+        "role": "Wipe",
+        "must_have": [
+            "exile all nonland"
+        ]
+    },
+    {
+        "role": "Wipe",
+        "must_have": [
+            "damage to each creature"
+        ]
+    },
+    {
+        "role": "Wipe",
+        "must_have": [
+            "damage to all creatures"
+        ]
+    },
+    {
+        "role": "Wipe",
+        "must_have": [
+            "return",
+            "all",
+            "hand",
+            "creature"
+        ]
+    },
+    {
+        "role": "Recursion",
+        "must_have": [
+            "return",
+            "graveyard",
+            "hand"
+        ]
+    },
+    {
+        "role": "Recursion",
+        "must_have": [
+            "return",
+            "graveyard",
+            "battlefield"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "counter target"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "destroy target"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "exile target"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "damage to any target"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "loses all abilities"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "owner",
+            "library",
+            "put",
+            "shuffle"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "fight"
+        ]
+    },
+    {
+        "role": "Removal",
+        "must_have": [
+            "return target",
+            "hand"
+        ],
+        "must_not": [
+            "graveyard",
+            "your hand",
+            "control",
+            "owner's hand"
+        ]
+    },
+    {
+        "role": "Ramp",
+        "must_have": [
+            "{t}",
+            "add"
+        ],
+        "must_not": [
+            "enchant",
+            "target"
+        ]
+    },
+    {
+        "role": "Ramp",
+        "must_have": [
+            "search your library",
+            "land",
+            "battlefield"
+        ]
+    },
+    {
+        "role": "Ramp",
+        "must_have": [
+            "enchant land"
+        ]
+    },
+    {
+        "role": "Ramp",
+        "must_have": [
+            "enchant creature",
+            "has \"{t}: add"
+        ]
+    },
+    {
+        "role": "Ramp",
+        "must_have": [
+            "costs",
+            "less"
+        ]
+    },
+    {
+        "role": "Ramp",
+        "must_have": [
+            "create",
+            "Treasure token"
+        ]
+    },
+    {
+        "role": "Draw",
+        "must_have": [
+            "draw",
+            "card"
+        ],
+        "must_not": [
+            "discards",
+            "counter target"
+        ]
+    }
+]
