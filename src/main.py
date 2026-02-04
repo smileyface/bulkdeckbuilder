@@ -3,15 +3,18 @@ import os
 import csv
 import glob
 
-import logic
 import output
 import externals
-from collection import Collection
+from loaders import configs
+from logic import curve, lands, optimize
+from src.collection import Collection
 
 # --- CONFIGURATION ---
-MIN_SCAN_SCORE = 25      # Only log decks if they have at least this much synergy
-VICTORY_THRESHOLD = 45   # Only EXPORT decks if they have at least this much synergy
-MAX_EXPORT_COUNT = 5     # Maximum number of decks to build
+# Only log decks if they have at least this much synergy
+MIN_SCAN_SCORE = 25
+# Only EXPORT decks if they have at least this much synergy
+VICTORY_THRESHOLD = 45
+MAX_EXPORT_COUNT = 5    # Maximum number of decks to build
 
 
 def load_collection_from_directory(directory_path):
@@ -71,7 +74,7 @@ def setup_environment():
     my_collection.enrich_from_local_bulk("oracle-cards.json")
 
     # Load Logic Rules
-    heuristic_rules = logic.load_heuristics("huristics.json")
+    heuristic_rules = configs.load_heuristics("huristics.json")
 
     return my_collection, heuristic_rules
 
@@ -151,17 +154,17 @@ def build_winner(candidate, collection, rules):
     print("\n--- 3. DECK CONSTRUCTION ---")
 
     # 1. Analyze Curve
-    target_lands, avg_cmc = logic.analyze_curve(candidate['decklist'],
+    target_lands, avg_cmc = curve.analyze_curve(candidate['decklist'],
                                                 collection)
 
     # 2. Optimize (Add Staples / Cut Chaff)
-    spell_list = logic.optimize_deck(candidate,
-                                     collection,
-                                     target_lands,
-                                     rules)
+    spell_list = optimize.optimize_deck(candidate,
+                                        collection,
+                                        target_lands,
+                                        rules)
 
     # 3. Add Lands (Pip Logic)
-    full_decklist = logic.add_smart_lands(spell_list,
+    full_decklist = lands.add_smart_lands(spell_list,
                                           collection,
                                           target_lands,
                                           candidate['commander'])
@@ -190,25 +193,28 @@ def main():
     if candidates:
         # Sort Highest Score First
         candidates.sort(key=lambda x: x['score'], reverse=True)
-        
+
         # LOGIC: Top 5 OR Score > 45 (Whichever is least / Intersection)
         # 1. Filter out anything below the Victory Threshold
-        high_quality = [c for c in candidates if c['score'] >= VICTORY_THRESHOLD]
-        
+        high_quality = [c for c in candidates
+                        if c['score'] >= VICTORY_THRESHOLD]
+
         # 2. Take the Top 5 of the survivors
         winners = high_quality[:MAX_EXPORT_COUNT]
-        
-        print(f"\n--- 3. RESULTS ---")
+
+        print("\n--- 3. RESULTS ---")
         print(f"Found {len(candidates)} valid themes.")
-        print(f"Filtered to {len(high_quality)} above score {VICTORY_THRESHOLD}.")
+        print(f"Filtered to {len(high_quality)} "
+              f"above score {VICTORY_THRESHOLD}.")
         print(f"Exporting top {len(winners)}...")
 
         if not winners:
-            print(f"❌ No decks met the Victory Threshold of {VICTORY_THRESHOLD}.")
-        
+            print(f"❌ No decks met the Victory Threshold"
+                  f"of {VICTORY_THRESHOLD}.")
+
         for winner in winners:
             build_winner(winner, my_collection, heuristic_rules)
-            
+
     else:
         print("\n❌ No viable decks found matching initial criteria.")
 

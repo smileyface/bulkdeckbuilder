@@ -1,0 +1,49 @@
+
+
+def check_curve_health(deck_list, collection):
+    stats = {1: 0,
+             2: 0,
+             3: 0,
+             4: 0,
+             5: 0,
+             6: 0}
+    for name in deck_list:
+        card = collection.get(name)
+        cmc = int(card['cmc'])
+        if cmc >= 6:
+            stats[6] += 1
+        elif cmc in stats:
+            stats[cmc] += 1
+
+    # Heuristic Warnings based on Source 1
+    if stats[2] < 12:
+        print("⚠️ Warning: Low on 2-drops (Target ~18)") [cite: 176]
+    if stats[4] > 12:
+        print("⚠️ Warning: Bloated 4-drop slot (Target ~10)") [cite: 183]
+    if stats[6] > 6:
+        print("⚠️ Warning: Too many expensive spells (Target ~5)") [cite: 189]
+
+
+def analyze_curve(card_names, collection):
+    total_cmc = 0
+    count = 0
+    for name in card_names:
+        card = collection._name_index.get(name.lower())
+        if card:
+            total_cmc += float(card.get('cmc', 0))
+            count += 1
+
+    if count == 0:
+        return 37, 0.0
+
+    avg_cmc = total_cmc / count
+    target_lands = 37
+    if avg_cmc > 3.8:
+        target_lands = 40
+    elif avg_cmc > 3.4:
+        target_lands = 38
+    elif avg_cmc < 2.4:
+        target_lands = 35
+    elif avg_cmc < 2.0:
+        target_lands = 33
+    return target_lands, avg_cmc
