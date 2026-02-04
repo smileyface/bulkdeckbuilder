@@ -17,11 +17,11 @@ def check_curve_health(deck_list, collection):
 
     # Heuristic Warnings based on Source 1
     if stats[2] < 12:
-        print("⚠️ Warning: Low on 2-drops (Target ~18)") [cite: 176]
+        print("⚠️ Warning: Low on 2-drops (Target ~18)")
     if stats[4] > 12:
-        print("⚠️ Warning: Bloated 4-drop slot (Target ~10)") [cite: 183]
+        print("⚠️ Warning: Bloated 4-drop slot (Target ~10)")
     if stats[6] > 6:
-        print("⚠️ Warning: Too many expensive spells (Target ~5)") [cite: 189]
+        print("⚠️ Warning: Too many expensive spells (Target ~5)")
 
 
 def analyze_curve(card_names, collection):

@@ -1,5 +1,5 @@
-from lands import color_map
-from classifier import classify_card
+from logic.lands import color_map
+from logic.classifier import classify_card
 
 
 def optimize_deck(deck_data, collection, target_lands, heuristic_rules):
