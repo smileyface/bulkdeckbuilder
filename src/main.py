@@ -3,8 +3,8 @@ import os
 import csv
 import glob
 
-import output
-import externals
+import src.output as output
+import src.externals as externals
 from loaders import configs
 from logic import curve, lands, optimize
 from src.collection import Collection
