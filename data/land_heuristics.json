@@ -1,0 +1,36 @@
+[
+    {
+        "role": "True Fetch",
+        "must_have": ["pay 1 life", "sacrifice", "search your library"],
+        "must_not": ["tapped"]
+    },
+    {
+        "role": "Tap Fetch",
+        "must_have": ["sacrifice", "search your library", "tapped"],
+        "must_not": ["pay 1 life"]
+    },
+    {
+        "role": "Shock",
+        "must_have": ["pay 2 life", "enters the battlefield tapped"]
+    },
+    {
+        "role": "Pain",
+        "must_have": ["deals 1 damage to you", "{t}: add"]
+    },
+    {
+        "role": "Bond",
+        "must_have": ["enters the battlefield tapped unless", "opponents"]
+    },
+    {
+        "role": "Check",
+        "must_have": ["enters the battlefield tapped unless you control a"]
+    },
+    {
+        "role": "Bounce",
+        "must_have": ["return a land you control", "hand"]
+    },
+    {
+        "role": "Rainbow",
+        "must_have": ["add one mana of any color"]
+    }
+]

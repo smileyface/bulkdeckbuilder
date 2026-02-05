@@ -2,7 +2,7 @@ from logic.lands import color_map
 from logic.classifier import classify_card
 
 
-def optimize_deck(deck_data, collection, target_lands, heuristic_rules):
+def optimize_deck(deck_data, collection, target_lands):
     print(f"\n🏗️  DECK ASSEMBLY: {deck_data['commander']}")
     print("-" * 40)
 
@@ -28,7 +28,7 @@ def optimize_deck(deck_data, collection, target_lands, heuristic_rules):
     for name in current_list:
         card = collection._name_index.get(name.lower())
         if card:
-            role = classify_card(card, heuristic_rules, edhrec_roles=role_map)
+            role = classify_card(card, edhrec_roles=role_map)
             if role in current_stats:
                 current_stats[role] += 1
 
@@ -65,7 +65,6 @@ def optimize_deck(deck_data, collection, target_lands, heuristic_rules):
             if card['Name'] in current_list:
                 continue
             if classify_card(card,
-                             heuristic_rules,
                              edhrec_roles=role_map) == role:
                 current_list.add(card['Name'])
                 added_log.append(f"+ {card['Name']} ({role})")
@@ -94,9 +93,12 @@ def optimize_deck(deck_data, collection, target_lands, heuristic_rules):
                         if name.lower() in collection._name_index]
         deck_objects.sort(key=lambda x: x.get('edhrec_rank', 99999),
                           reverse=True)
+        trimmed_cards = deck_objects[:max_non_lands]
         final_list = [c['Name'] for c
                       in deck_objects[len(current_list)-max_non_lands:]]
         print("   ✂️  Trimmed excess cards.")
+        for card in trimmed_cards:
+            print(f"      - {card['Name']}")
         return final_list
 
     return list(current_list)

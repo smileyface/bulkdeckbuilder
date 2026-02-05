@@ -5,8 +5,11 @@ oracle text, type line, and mana cost, utilizing both heuristic rules and
 external data.
 """
 
+spell_heuristic_rules = []
+land_heuristic_rules = []
 
-def classify_card(card, rules, edhrec_roles=None):
+
+def classify_card(card, edhrec_roles=None):
     name = card['Name']
     if edhrec_roles and name in edhrec_roles:
         return edhrec_roles[name]
@@ -16,7 +19,9 @@ def classify_card(card, rules, edhrec_roles=None):
     cmc = float(card.get('cmc', 0))
 
     if 'land' in type_line:
-        return 'Land'
+        rules = land_heuristic_rules
+    else:
+        rules = spell_heuristic_rules
 
     for rule in rules:
         # CMC Caps logic
@@ -30,22 +35,7 @@ def classify_card(card, rules, edhrec_roles=None):
         if role == 'Recursion' and cmc >= 6:
             continue
 
-        # Check Must Have
-        match = True
-        for phrase in rule['must_have']:
-            if phrase not in text:
-                match = False
-                break
-        if not match:
-            continue
-
-        # Check Must Not
-        if 'must_not' in rule:
-            for phrase in rule['must_not']:
-                if phrase in text:
-                    match = False
-                    break
-
+        match = check_rule(text, rule['must_have'], rule.get('must_not', []))
         if match:
             return role
 

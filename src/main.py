@@ -7,6 +7,7 @@ import src.output as output
 import src.externals as externals
 from loaders import configs
 from logic import curve, lands, optimize
+from logic import classifier
 from src.collection import Collection
 
 # --- CONFIGURATION ---
@@ -69,14 +70,20 @@ def setup_environment():
     """Loads the card collection and configuration rules."""
     print("--- 1. ENVIRONMENT SETUP ---")
 
+    print("Loading configuration files...")
+    # Load Logic Rules
+    classifier.spell_heuristic_rules = configs.load_heuristics(os.path.join(
+        "data",
+        "spell_heuristics.json"))
+    classifier.land_heuristic_rules = configs.load_heuristics(os.path.join(
+        "data",
+        "land_heuristics.json"))
+
     # Load Collection
     my_collection = load_collection_from_directory("./manabox_export")
     my_collection.enrich_from_local_bulk("oracle-cards.json")
 
-    # Load Logic Rules
-    heuristic_rules = configs.load_heuristics("huristics.json")
-
-    return my_collection, heuristic_rules
+    return my_collection
 
 
 def analyze_single_commander(cmd, collection):
@@ -147,7 +154,7 @@ def run_analysis_pipeline(collection):
     return all_candidates
 
 
-def build_winner(candidate, collection, rules):
+def build_winner(candidate, collection):
     """
     Takes the winning candidate, runs the optimization logic, and exports.
     """
@@ -160,8 +167,7 @@ def build_winner(candidate, collection, rules):
     # 2. Optimize (Add Staples / Cut Chaff)
     spell_list = optimize.optimize_deck(candidate,
                                         collection,
-                                        target_lands,
-                                        rules)
+                                        target_lands)
 
     # 3. Add Lands (Pip Logic)
     full_decklist = lands.add_smart_lands(spell_list,
@@ -184,7 +190,7 @@ def build_winner(candidate, collection, rules):
 
 def main():
     # 1. Setup
-    my_collection, heuristic_rules = setup_environment()
+    my_collection = setup_environment()
 
     # 2. Analyze All
     candidates = run_analysis_pipeline(my_collection)
@@ -213,7 +219,7 @@ def main():
                   f"of {VICTORY_THRESHOLD}.")
 
         for winner in winners:
-            build_winner(winner, my_collection, heuristic_rules)
+            build_winner(winner, my_collection)
 
     else:
         print("\n❌ No viable decks found matching initial criteria.")
