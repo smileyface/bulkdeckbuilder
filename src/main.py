@@ -6,7 +6,7 @@ import glob
 import src.output as output
 import src.externals as externals
 from loaders import configs
-from logic import curve, lands, optimize
+from logic import (curve, lands, optimize)
 from logic import classifier
 from src.collection import Collection
 
@@ -170,10 +170,9 @@ def build_winner(candidate, collection):
                                         target_lands)
 
     # 3. Add Lands (Pip Logic)
-    full_decklist = lands.add_smart_lands(spell_list,
-                                          collection,
-                                          target_lands,
-                                          candidate['commander'])
+    full_decklist, target_lands = lands.add_smart_lands(spell_list,
+                                                        collection,
+                                                        candidate['commander'])
 
     # Update Object
     candidate['decklist'] = full_decklist

@@ -24,6 +24,8 @@ def check_curve_health(deck_list, collection):
         print("⚠️ Warning: Too many expensive spells (Target ~5)")
 
 
+# Will be reimplemented to actually deal with the complexities of commander 
+# curve later.
 def analyze_curve(card_names, collection):
     total_cmc = 0
     count = 0
@@ -37,13 +39,4 @@ def analyze_curve(card_names, collection):
         return 37, 0.0
 
     avg_cmc = total_cmc / count
-    target_lands = 37
-    if avg_cmc > 3.8:
-        target_lands = 40
-    elif avg_cmc > 3.4:
-        target_lands = 38
-    elif avg_cmc < 2.4:
-        target_lands = 35
-    elif avg_cmc < 2.0:
-        target_lands = 33
-    return target_lands, avg_cmc
+    return total_cmc, avg_cmc

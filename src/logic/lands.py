@@ -49,17 +49,9 @@ def _add_non_basics(deck_list, collection, slots_available, commander_name):
             if not mentioned_colors.intersection(cmd_colors):
                 continue
 
-            # OFF-COLOR PENALTY
-            # Check if it mentions colors we DO NOT have.
-            # Polluted Delta (U, B) in Izzet (U, R) -> Mentions B (Off-color).
             off_color_hits = mentioned_colors - cmd_colors
 
             if off_color_hits:
-                # It fetches an off-color type.
-                # We ONLY allow this if it is a "High Efficiency" fetch
-                # (Rank < 600).
-                # Polluted Delta (Rank 30) -> PASS.
-                # Bant Panorama (Rank 2500) -> FAIL.
                 if rank > 600:
                     continue
 
@@ -164,7 +156,27 @@ def _fill_basics(deck_list, collection, slots_needed, commander_name):
     return deck_list
 
 
-def add_smart_lands(deck_list, collection, total_lands_needed, commander_name):
+def liquid_land_count(deck_list, collection):
+    avg_cmc = 0
+    for name in deck_list:
+        card = collection._name_index.get(name.lower())
+        if card:
+            avg_cmc += float(card.get('cmc', 0))
+    avg_cmc /= len(deck_list)
+    target_lands = 37
+    if avg_cmc > 3.8:
+        target_lands = 40
+    elif avg_cmc > 3.4:
+        target_lands = 38
+    elif avg_cmc < 2.4:
+        target_lands = 35
+    elif avg_cmc < 2.0:
+        target_lands = 33
+    return target_lands
+
+
+def add_smart_lands(deck_list, collection, commander_name):
+    total_lands_needed = liquid_land_count(deck_list, collection)
     print(f"\n   🌍 MANA BASE ({total_lands_needed} slots)")
 
     # Phase 1: Non-Basics
@@ -180,4 +192,4 @@ def add_smart_lands(deck_list, collection, total_lands_needed, commander_name):
                              remaining_slots,
                              commander_name)
 
-    return deck_list
+    return deck_list, total_lands_needed
